@@ -48,7 +48,7 @@ class Server:
         print(f"[NEW CONNECTION] {addr} connected.")
         connected = True # 1 if the client is still connected
         while connected:
-            command = input(">>>")
+            command = input("command: ")
             if command != '\n' and command:
                 conn.send(command.encode(self.FORMAT))
                 # recive the message from the client
