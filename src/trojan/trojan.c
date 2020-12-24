@@ -14,7 +14,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-int start(int argc , char *argv[])
+int start()
 {
   int sock;
   struct sockaddr_in server;
@@ -59,3 +59,4 @@ int start(int argc , char *argv[])
   close(sock);
   return 0;
 }
+
