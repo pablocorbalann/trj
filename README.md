@@ -1,2 +1,2 @@
-# trj
-Execute any command in other's computer using a trojan horse coded and compiled in C. Just for educational purpose.
+<p align="center"><img alt="TRJ" src="img/logo.png"></p>
+<p align="center"><img alt="..." src="iimg/trojan-separator.png"></p>
