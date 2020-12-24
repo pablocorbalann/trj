@@ -1,12 +1,26 @@
+<p align="center"><img alt="TRJ" src="../img/logo.png"></p>
+
+<p align="center">
+  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/pblcc/trj?color=5d3535&label=SIZE&style=for-the-badge">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/github/stars/pblcc/trj?label=STARS&style=flat-square&color=5d3535">
+  <img src="https://img.shields.io/github/watchers/pblcc/trj?color=5d3535&label=WATCHERS&style=flat-square">
+  <img alt="GitHub forks" src="https://img.shields.io/github/forks/pblcc/trj?color=5d3535&label=FORKS&style=flat-square">
+</p>
+
+
 <p align = "center">
-  <a href="docs/README-es.md">Español</a>
+  <a href="README-es.md">Español</a> |
+  <a href="../README.md">English</a>
 </p>
 
 ## Tabla de contenido
-- [Tabla de contenido](#tabla de contenido)
+- [Tabla de contenido](#tabla-de-contenido)
 - [Idea](#idea)
 - [Instalación](#instalación)
-  - [Requisitos previos](#requisitos previos)
+  - [Requisitos previos](#requisitos-previos)
   - [Compilación del cliente](#compilación-del-cliente)
   - [Ejecutando el servidor](#ejecutando-el-servidor)
 - [Aviso legal](#aviso-legal)
@@ -52,14 +66,14 @@ Ahora puede iniciar el cliente como:
 ```
 
 ### Ejecutando el servidor
-Para ejecutar el servidor, debe usar [Python] (https://python.org). Ejecute los siguientes comandos:
+Para ejecutar el servidor, debe usar [Python](https://python.org). Ejecute los siguientes comandos:
 ```
 python server/server.py
 ```
 ###### NOTA: Si tienes varias instalaciones de Python, usa Python3
 
 <p align = "centro">
-  <img src = "img/banner.png">
+  <img src="../img/banner.png">
 </p>
 
 ---
@@ -67,6 +81,6 @@ python server/server.py
 ## Aviso legal
 Trc se puede utilizar con fines maliciosos, por lo que tenemos que especificar un par de cosas.
 ### Licencia
-Este proyecto está bajo la [Licencia] BSL (LICENCIA)
+Este proyecto está bajo la [Licencia](LICENCE)
 ### Garantía
 Use tcr ** bajo su propio riesgo **, no soy responsable de ningún uso poco ético que haga con este repositorio. Este repositorio ha sido programado para uso educativo.**
