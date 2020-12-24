@@ -35,6 +35,7 @@ Trc es un caballo de Troya creado con la intención de tener ** acceso completo 
 
 Para lograr esto, se utiliza un servidor programado en Python que se conecta a un socket programado en C desde el lado del cliente.
 
+<p align="center"><img src="../img/explication.png"></p>
 <p align="center"><img src="../img/bl.png"></p>
 
 ## Instalación
