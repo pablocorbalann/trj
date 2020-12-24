@@ -27,14 +27,15 @@
   - [Licencia](#licencia)
   - [Garantía](#garantía)
   
----
+
+<p align="center"><img src="../img/br.png"></p>
 
 ## Idea
 Trc es un caballo de Troya creado con la intención de tener ** acceso completo al sistema informático de otra persona **, acceder a su cmd / terminal y poder ejecutar cualquier comando**.
 
 Para lograr esto, se utiliza un servidor programado en Python que se conecta a un socket programado en C desde el lado del cliente.
 
----
+<p align="center"><img src="../img/bl.png"></p>
 
 ## Instalación
 
@@ -72,11 +73,7 @@ python server/server.py
 ```
 ###### NOTA: Si tienes varias instalaciones de Python, usa Python3
 
-<p align = "centro">
-  <img src="../img/banner.png">
-</p>
-
----
+<p align="center"><img src="../img/br.png"></p>
 
 ## Aviso legal
 Trc se puede utilizar con fines maliciosos, por lo que tenemos que especificar un par de cosas.
