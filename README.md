@@ -28,6 +28,9 @@
 ---
 
 ## Idea
+Trc is a Trojan horse created with the intention of having **full access to someone else's computer system**, accessing their cmd/terminal and being able to execute any command. 
+
+To achieve this, a server programmed in Python is used that connects to a socket programmed in C from the client side.
 
 ---
 
