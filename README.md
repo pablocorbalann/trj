@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="docs/README-es.md">Español</a>
+  <a href="doc/README-es.md">Español</a>
 </p>
 
 ## Table of contents
