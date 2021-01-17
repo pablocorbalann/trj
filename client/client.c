@@ -6,7 +6,7 @@
 
 void startTrojan(void *args)
 {
-  print("[T]: Starting the trojan")
+  print("[T]: Starting the trojan");
 }
 
 int main() 

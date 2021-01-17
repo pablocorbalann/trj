@@ -52,7 +52,7 @@ class Server:
         while connected:
             client_data = conn.recv(self.bites).decode(self.dcf)
             print(f"[{addr}]: {client_data}")
-            conn.send(f"[S]: msg recevived at {self.addr}".encode(self.dcf))
+            # conn.send(f"[S]: msg recevived at {self.addr}".encode(self.dcf))
 
     def start(self):
         """
