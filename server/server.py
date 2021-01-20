@@ -1,6 +1,8 @@
 import socket
 import threading
 
+import monoclient
+
 class Server:
     """
     This class is used to manage all the servers trj uses and to manage
@@ -35,24 +37,28 @@ class Server:
 
         self.clients = [] # stores configuration of each client
 
-    def handle_client(self, conn, addr):
+    def handle_client(self, client_id, conf):
         """
         This method is a thread used to handle all the clients that connect to
         the server.
 
-        Parameters:
-            conn => The connection of the client
-            addr => The addr address of the server
+        Parameters
+        ----------
+        client_id: int
+            the number to determine the client
+        conf: monoclient.ClientConfiguration
+            The configuration of the client
         """
+        client = monoclient.Client(client_id, conf)
         # some debug from the server
-        print(f"[NEW CONNECTION] {addr} connected.")
+        print(f"[NEW CONNECTION] {client.conf.addr} connected.")
         # append the connection to the clients
-        self.clients.append([conn, addr])
+        self.clients.append(client)
         connected = True # 1 if the client is still connected
         while connected:
-            conn.send(input("Type the command: ").encode(self.dcf)) 
-            client_data = conn.recv(self.bites).decode(self.dcf)
-            print(f"[{addr}]: {client_data}")
+            client.send(input(">>> "), self.dcf)
+            client_data = client.recv(self.bites, self.dcf)
+            print(f"{client.conf.__repr__()}: {client_data}")
 
     def start(self):
         """
@@ -66,11 +72,14 @@ class Server:
         self.server.listen()
         print(f"[LISTENING]: Server is listening on {self.addr}")
         running = True
+        client_counter = 0
         while running:
             try:
+                client_counter += 1
                 conn, addr = self.server.accept()
+                client_configuration = monoclient.ClientConfiguration(conn, addr)
                 # create the thread for the self.handle_client method
-                thread = threading.Thread(target=self.handle_client, args=(conn, addr))
+                thread = threading.Thread(target=self.handle_client, args=(client_counter, client_configuration))
                 thread.start()
                 print(f"[ACTIVE CONNECTIONS] {len(self.clients) + 1}")
             except Exception as e:

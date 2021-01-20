@@ -9,32 +9,49 @@
 #define PORT 8080
 
 /*
+ * Starts the while loop for:
+ *  - receiving the messages from the server
+ *  - processing the messages
+ *  - sending a confirmation to the server
+ *
+ *  Parameters
+ *  ----------
+ *    fd: int
+ *      The file descriptor of the socket.
+ */
+int socketLoop(int fd)
+{
+  int len;
+  // bf stands for buffer, bflen stands for buffer len
+  int bflen = 100;
+  char bf[bflen];
+  while (1)
+  {
+    bzero(bf, bflen);
+    recv(fd, bf, bflen, 0);
+    printf("s: %s\n", bf);
+    bzero(bf, bflen);
+    strcpy(bf, "Message received at the client...");
+    send(fd, bf, strlen(bf), 0);
+  }
+}
+
+/*
  * Actually starts the socket connection of the client using the tcp
  * model and server sockets.
  */
 int socketStart()
 {
+
   struct sockaddr_in serv;
-  int fd, conn; // FD stands for file descriptor (the descriptor of the socket)
-  char message [100] = ""; // Stores messages sents from the server 
-  // Set up the actual socket and then bind it to the server
+  int fd;
+  int conn;
   fd = socket(AF_INET, SOCK_STREAM, 0);
-  if (fd < 0)
-  {
-    printf("Can't create the socket...\n");
-  }
-  else 
-    printf("Socket created successfuly...\n");
   serv.sin_family = AF_INET;
   serv.sin_port = htons(PORT);
-  inet_pton(AF_INET, IP_ADDRESS, &serv.sin_addr); // this line binds the client
-  // Start the chat while loop
-  while (1)
-  {
-    printf("Enter a message to the server: ");
-    fgets(message, 100, stdin);
-    send(fd, message, strlen(message), 0); 
-  }
+  inet_pton(AF_INET, IP_ADDRESS, &serv.sin_addr); //This binds the client
+  connect(fd, (struct sockaddr *)&serv, sizeof(serv)); //This connects the client to the server
+  socketLoop(fd);
 }
 
 /*
@@ -66,6 +83,6 @@ int socketTest()
 
 int main()
 {
-  socketTest();
+  socketStart();
   return 0;
 }
