@@ -50,9 +50,9 @@ class Server:
         self.clients.append([conn, addr])
         connected = True # 1 if the client is still connected
         while connected:
+            conn.send(input("Type the command: ").encode(self.dcf)) 
             client_data = conn.recv(self.bites).decode(self.dcf)
             print(f"[{addr}]: {client_data}")
-            # conn.send(f"[S]: msg recevived at {self.addr}".encode(self.dcf))
 
     def start(self):
         """
@@ -85,5 +85,5 @@ if __name__ == '__main__':
         "utf-8",
         128
     ]
-    s = Server(4444, sconf)
+    s = Server(8080, sconf)
     s.start()
