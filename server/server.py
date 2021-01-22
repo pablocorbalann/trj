@@ -35,7 +35,68 @@ class Server:
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind(self.addr) # bind the server to the addr
 
-        self.clients = [] # stores configuration of each client
+        self.clients = {} # stores configuration of each client
+
+
+    def loop_client(self, client):
+        """
+        Sends messages and receives messages from an specific client.
+
+        Parameters
+        ----------
+        client: monoclient.Client
+            The client to iterate
+        """
+        command = input("> ")
+        # send the actual command.
+        client.send(command, self.dcf)
+        client_data = client.recv(self.bites, self.dcf)
+        # debug the client data
+        print(f"{client.conf.__repr__()}: {client_data}")
+        # store the command
+        comand_data = monoclient.Command(command, client_data)
+        self.clients[client.client_id].commands.append(commands_data)
+   
+
+    def send_to_all_clients(self):
+        """
+        Request a command and sends that command to all the clients connected
+
+        (kind of a broadcast)
+        """
+        command = input("> ")
+        client_data_registrer = []
+        for i, client in self.clients.items():
+            client.send(command, self.dcf)
+            client_data = client.recv(self.bites, self.dcf)
+            client_data_registrer.append(client_data)
+        print(f"{command} sended to {len(client_data_register)} clients")
+
+
+    def loop(self):
+        """
+        This method is used to loop the options and depending on what the
+        server manager types, it will invoke other methods.
+        """
+        looping = True
+        # create the simple hash
+        loop_hash = {
+            1: self.send_to_all_clients
+        }
+        while looping:
+            option = 0
+            print(f"[1]: Send a command to all the clients ({len(self.clients)})")
+            try:
+                option = int(input("Select what do you want to do: "))
+            except Exception as e:
+                print("Error, invalid iteral / option...")
+            try:
+                loop_hash[option]()
+            except KeyError as e:
+                print("Invalid option... {option}")
+            except Exception as e:
+                print("Internal crash at looping options...")
+
 
     def handle_client(self, client_id, conf):
         """
@@ -53,20 +114,14 @@ class Server:
         # some debug from the server
         print(f"[NEW CONNECTION] {client.conf.addr} connected.")
         # append the connection to the clients
-        self.clients.append(client)
-        connected = True # 1 if the client is still connected
-        while connected:
-            client.send(input(">>> "), self.dcf)
-            client_data = client.recv(self.bites, self.dcf)
-            print(f"{client.conf.__repr__()}: {client_data}")
+        self.clients[client_id] = client
 
     def start(self):
         """
         This method is used to start the server itself using the .listen() method
         and then starting a while loop to create the threads
 
-        Parameters:
-            self => The Server() class
+        Parameters: self => The Server() class
         """
         # start the server and listen it
         self.server.listen()
@@ -81,11 +136,11 @@ class Server:
                 # create the thread for the self.handle_client method
                 thread = threading.Thread(target=self.handle_client, args=(client_counter, client_configuration))
                 thread.start()
-                print(f"[ACTIVE CONNECTIONS] {len(self.clients) + 1}")
+                print(f"[ACTIVE CONNECTIONS] {len(self.clients)}")
+                self.loop()
             except Exception as e:
                 # report the bug informing the user
                 print(f"[SERVER CRASH]: Fatal error, {e}")
-                running = False
 
 if __name__ == '__main__':
     # actually run the server

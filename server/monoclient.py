@@ -1,6 +1,20 @@
 # This file contains the information for creating a socket for EACH 
 # of the clients, it also contains the CLient class itself that is managed from the 
 # server file (see server.py)
+class Command:
+    """
+    Stores information about the every single command of the client.
+    """
+    def __init__(self, command, result):
+        self.__command = command
+        self.__result = result
+    
+    def get_command(self):
+        return self.__command
+
+    def get_result(self):
+        return self.__result
+
 class ClientConfiguration:
     """
     Stores all the configuration for a simple client, for example the port
@@ -48,6 +62,8 @@ class Client:
         """
         self.client_id = client_id
         self.conf = conf
+        self.commands = []
+
     
     def send(self, msg, dcf):
         """
