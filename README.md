@@ -26,6 +26,7 @@
 - [Legal advise](#legal-advice)
   - [License](#license)
   - [Warranty](#warranty)
+- [Todo](#todo)
   
 <p align="center"><img src="img/br.png"></p>
 
@@ -84,3 +85,15 @@ Trc can be used for malicious purposes so we have to specify a couple of things.
 This project is under the BSL [License](LICENSE)
 ### Warranty
 Use tcr **at your own risk**, I am not responsible for any unethical use you make with this repository. This repository has been programmed for educational use.
+
+## Todo
+- ~Create a small server using in Python~
+- ~Create a socket connection using C from the client to the server (tcp)~
+- ~Implement this connection in a simple text chat~
+- Upgrade the server so that it can manage more than one client at the same time
+- Create the trojan in C inside `client/trojan`
+- Make the trojan run in a different thread
+- Include non-trojan code in a second thread, so that the user doesn't notice about the trojan
+- Sport the configuration (yaml, json...)
+- Add flags to the server (port, ip, execute, sudo...)
+- Generate executables
