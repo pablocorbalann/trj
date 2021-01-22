@@ -1,3 +1,5 @@
+# Important note: I'm still developing trj. Let's try to get an alpha as soon as posible.
+
 <p align="center"><img alt="TRJ" src="img/logo.png"></p>
 
 <p align="center">
