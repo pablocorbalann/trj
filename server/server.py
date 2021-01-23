@@ -3,16 +3,48 @@ import threading
 import sys
 
 import monoclient
+import decorators
 
-class Colors:
+def print_server_options(options):
     """
-    Contains the Asccii colors used in this script
+    This function is used to print the server options using a format. It uses
+    a parameter :param options: that has the form of:
+
+        {
+            1: (function_1, message1),
+            2: (function_2, message2),
+            ...
+            n: (function_n, messagen)
+        }
+
+    And prints it like:
+        
+        [1] message1
+        [2] message2
+        [n] message3
     """
-    INFO = "\033[96m"
-    ERR = "\033[93m"
-    OK = "\033[92m"
-    FAIL = "\033[91m"
-    ENDC = "\033[0m" 
+    colors = decorators.Colors()
+    print(f"{colors.INFO}[0]{colors.ENDC} Close the server...")
+    for i, option in options.items():
+        print(f"{colors.INFO}[{i}]{colors.ENDC} {option[1]}")
+
+def request_server_option():
+    """
+    Is used to request the option and prints it.
+
+    Returns
+    -------
+    option: int
+        The option that has to be returned
+    """
+    option = 0
+    try:
+        option = int(input(f"{self.__colors.OK}Select what do you want to do: {self.__colors.ENDC}"))
+    except ValueError as e:
+        print(f"{self.__colors.ERR}Error, invalid value for base 10 {e}{self.__colors.ENDC}")
+    except Exception as e:
+        print(f"{self.__colors.ERR}Error, invalid iteral / option... {e}{self.__colors.ENDC}")
+    return option
 
 class Server:
     """
@@ -50,7 +82,7 @@ class Server:
         self.clients = {} # stores configuration of each client
 
         # colors
-        self.__colors = Colors()
+        self.__colors = decorators.Colors()
 
 
     def loop_client(self, client):
@@ -73,7 +105,7 @@ class Server:
         self.clients[client.client_id].commands.append(commands_data)
    
 
-    def send_to_all_clients(self):
+    def __send_to_all_clients(self):
         """
         Request a command and sends that command to all the clients connected
 
@@ -96,18 +128,14 @@ class Server:
         looping = True
         # create the simple hash
         loop_hash = {
-            1: (self.send_to_all_clients, "Send a message to all the clients")
+            1: (self.__send_to_all_clients, "Send a message to all the clients")
         }
         while looping:
             option = 0
             # Print the options
-            for i, option_message in loop_hash.items():
-                print(f"{self.__colors.INFO}[{i}]{self.__colors.ENDC} {option_message[1]}")
+            print_server_options(loop_hash)
+            option = request_server_option()
             # Get the option and start the hash map 
-            try:
-                option = int(input(f"{self.__colors.OK}Select what do you want to do: {self.__colors.ENDC}"))
-            except Exception as e:
-                print(f"{self.__colors.ERR}Error, invalid iteral / option... {e}{self.__colors.ENDC}")
             try:
                 loop_hash[option][0]() # the position 0 is the function
             except KeyError as e:
