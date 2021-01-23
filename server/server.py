@@ -1,7 +1,18 @@
 import socket
 import threading
+import sys
 
 import monoclient
+
+class Colors:
+    """
+    Contains the Asccii colors used in this script
+    """
+    INFO = "\033[96m"
+    ERR = "\033[93m"
+    OK = "\033[92m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m" 
 
 class Server:
     """
@@ -28,6 +39,7 @@ class Server:
         self.bites = conf[2]
 
         self.addr = (self.ip, self.port)
+        self.__loop_thread = None
 
         self.disconnect = "!DISCONNECT" # msg to disconnect
 
@@ -36,6 +48,9 @@ class Server:
         self.server.bind(self.addr) # bind the server to the addr
 
         self.clients = {} # stores configuration of each client
+
+        # colors
+        self.__colors = Colors()
 
 
     def loop_client(self, client):
@@ -47,12 +62,12 @@ class Server:
         client: monoclient.Client
             The client to iterate
         """
-        command = input("> ")
+        command = input(">>> ")
         # send the actual command.
         client.send(command, self.dcf)
         client_data = client.recv(self.bites, self.dcf)
         # debug the client data
-        print(f"{client.conf.__repr__()}: {client_data}")
+        print(f"{self.__colors.INFO}{client.conf.__repr__()}: {client_data}{self.__colors.ENDC}")
         # store the command
         comand_data = monoclient.Command(command, client_data)
         self.clients[client.client_id].commands.append(commands_data)
@@ -64,16 +79,16 @@ class Server:
 
         (kind of a broadcast)
         """
-        command = input("> ")
-        client_data_registrer = []
+        command = input(">>> ")
+        cdr = [] # client data register
         for i, client in self.clients.items():
             client.send(command, self.dcf)
             client_data = client.recv(self.bites, self.dcf)
-            client_data_registrer.append(client_data)
-        print(f"{command} sended to {len(client_data_register)} clients")
+            cdr.append(client_data)
+        print(f"{self.__colors.INFO}{command} sended to {len(cdr)} clients{self.__colors.ENDC}")
 
 
-    def loop(self):
+    def __loop(self):
         """
         This method is used to loop the options and depending on what the
         server manager types, it will invoke other methods.
@@ -81,24 +96,27 @@ class Server:
         looping = True
         # create the simple hash
         loop_hash = {
-            1: self.send_to_all_clients
+            1: (self.send_to_all_clients, "Send a message to all the clients")
         }
         while looping:
             option = 0
-            print(f"[1]: Send a command to all the clients ({len(self.clients)})")
+            # Print the options
+            for i, option_message in loop_hash.items():
+                print(f"{self.__colors.INFO}[{i}]{self.__colors.ENDC} {option_message[1]}")
+            # Get the option and start the hash map 
             try:
-                option = int(input("Select what do you want to do: "))
+                option = int(input(f"{self.__colors.OK}Select what do you want to do: {self.__colors.ENDC}"))
             except Exception as e:
-                print("Error, invalid iteral / option...")
+                print(f"{self.__colors.ERR}Error, invalid iteral / option... {e}{self.__colors.ENDC}")
             try:
-                loop_hash[option]()
+                loop_hash[option][0]() # the position 0 is the function
             except KeyError as e:
-                print("Invalid option... {option}")
+                print(f"{self.__colors.ERR}Invalid option... {option}{self.__colors.ENDC}")
             except Exception as e:
-                print("Internal crash at looping options...")
+                print(f"{self.__colors.FAIL}Internal crash at looping options... {e}{self.__colors.ENDC}")
 
 
-    def handle_client(self, client_id, conf):
+    def __handle_client(self, client_id, conf):
         """
         This method is a thread used to handle all the clients that connect to
         the server.
@@ -112,7 +130,7 @@ class Server:
         """
         client = monoclient.Client(client_id, conf)
         # some debug from the server
-        print(f"[NEW CONNECTION] {client.conf.addr} connected.")
+        print(f"{self.__colors.INFO}[NEW CONNECTION] {client.conf.addr} connected.{self.__colors.ENDC}")
         # append the connection to the clients
         self.clients[client_id] = client
 
@@ -134,10 +152,15 @@ class Server:
                 conn, addr = self.server.accept()
                 client_configuration = monoclient.ClientConfiguration(conn, addr)
                 # create the thread for the self.handle_client method
-                thread = threading.Thread(target=self.handle_client, args=(client_counter, client_configuration))
+                thread = threading.Thread(target=self.__handle_client, args=(client_counter, client_configuration))
                 thread.start()
                 print(f"[ACTIVE CONNECTIONS] {len(self.clients)}")
-                self.loop()
+                # check if the loop thread is already working, if it's restart it.
+                if self.__loop_thread != None:
+                    self.__loop_thread.join()
+                    self.__loop_thread = None
+                self.__loop_thread = threading.Thread(target=self.__loop)
+                self.__loop_thread.start()
             except Exception as e:
                 # report the bug informing the user
                 print(f"[SERVER CRASH]: Fatal error, {e}")
@@ -149,5 +172,11 @@ if __name__ == '__main__':
         "utf-8",
         128
     ]
-    s = Server(8080, sconf)
+    # check if the user did python3 server.py <ip> <port>
+    port = 8080
+    if len(sys.argv) >= 3:
+        sconf[0] = sys.argv[1]
+        port = sys.argv[2]
+    # create the server
+    s = Server(int(port), sconf)
     s.start()
