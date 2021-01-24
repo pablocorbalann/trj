@@ -50,9 +50,6 @@ def update_server_connections(server_addr, active_connections=0):
     clear_screen()
     c = Colors()
     ts = shutil.get_terminal_size() # columns and lines (c, l)
-    line = f'+{"-" * (ts.columns - 2)}+'
-    # print the line
-    print(f"{c.INFO}{line}{c.ENDC}")
     # print the addr of the server
     server_addr = f"SERVER AT {server_addr[0]}-PORT {server_addr[1]}"
     print(f"{c.INFO}{server_addr}{c.ENDC}", end="")

@@ -188,8 +188,9 @@ class Server:
                 # check if the loop thread is already working, if it's restart it.
                 decorators.update_server_connections(self.addr, len(self.clients))
                 if self.__loop_thread != None:
+                    # If the loop thread is not equal to none, we should end this 
+                    # thread and reset it to None.
                     self.__loop_thread.join()
-                    self.__loop_thread = None
                 self.__loop_thread = threading.Thread(target=self.__loop)
                 self.__loop_thread.start()
             except Exception as e:
