@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-#include "trojan/trojan.h"
+// #include "trojan/trojan.h"
 
-void startTrojan(void *args)
+void *startTrojan(void *args)
 {
-  print("[T]: Starting the trojan");
+  printf("[T]: Starting the trojan");
 }
 
 int main() 

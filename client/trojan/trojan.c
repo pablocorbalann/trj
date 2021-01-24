@@ -81,7 +81,7 @@ int socketTest()
   }
 }
 
-int main()
+int socketMain()
 {
   socketStart();
   return 0;
