@@ -28,7 +28,7 @@
   - [Warranty](#warranty)
 - [Todo](#todo)
 - [Advanced](#advanced)
-  - [Modify the server IP and PORT using CLI](#modify-the-server-ip-and-port)
+  - [Modify the server IP and PORT using CLI](#modify-the-server-ip-and-port-using-cli)
   - [Compiling just the trojan code of trj](#compile-just-the-trojan-code)
   
 <p align="center"><img src="img/br.png"></p>
