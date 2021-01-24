@@ -27,6 +27,9 @@
   - [License](#license)
   - [Warranty](#warranty)
 - [Todo](#todo)
+- [Advanced](#advanced)
+  - [Modify the server IP and PORT using CLI](#modify-the-server-ip-and-port-using-cli)
+  - [Compiling just the trojan code of trj](#compile-just-the-trojan-code)
   
 <p align="center"><img src="img/br.png"></p>
 
@@ -97,3 +100,29 @@ Use tcr **at your own risk**, I am not responsible for any unethical use you mak
 - Sport the configuration (yaml, json...)
 - Add flags to the server (port, ip, execute, sudo...)
 - Generate executables
+
+## Advanced
+### Modify the server IP and port using CLI
+You can modify the server IP and the server PORT from the console itself. Instead of running:
+```shell
+python server/server.py
+```
+Run:
+```shell
+python server/server.py <ip> <port>
+```
+For example:
+```shell
+python server/server 127.0.0.1 4404
+```
+### Compile just the trojan code
+If you want just to compile the trojan code of the project, you can use:
+```shell
+git clone https://github.com/pblcc/trj
+cd trj/client/trojan
+make
+```
+After that you could run **just the trojan part of trj** using 
+```shell
+./trojan-code
+```
