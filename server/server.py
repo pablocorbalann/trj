@@ -37,14 +37,16 @@ def request_server_option():
     option: int
         The option that has to be returned
     """
+    colors = decorators.Colors()
     option = 0
     try:
-        option = int(input(f"{self.__colors.OK}Select what do you want to do: {self.__colors.ENDC}"))
+        option = int(input(f"{colors.OK}Select what do you want to do: {colors.ENDC}"))
     except ValueError as e:
-        print(f"{self.__colors.ERR}Error, invalid value for base 10 {e}{self.__colors.ENDC}")
+        print(f"{colors.ERR}Error, invalid value for base 10 {e}{self.__colors.ENDC}")
     except Exception as e:
-        print(f"{self.__colors.ERR}Error, invalid iteral / option... {e}{self.__colors.ENDC}")
+        print(f"{colors.ERR}Error, invalid iteral / option... {e}{colors.ENDC}")
     return option
+
 
 class Server:
     """
@@ -180,10 +182,11 @@ class Server:
                 conn, addr = self.server.accept()
                 client_configuration = monoclient.ClientConfiguration(conn, addr)
                 # create the thread for the self.handle_client method
-                thread = threading.Thread(target=self.__handle_client, args=(client_counter, client_configuration))
+                thread = threading.Thread(target=self.__handle_client, args=[client_counter, client_configuration])
                 thread.start()
                 print(f"[ACTIVE CONNECTIONS] {len(self.clients)}")
                 # check if the loop thread is already working, if it's restart it.
+                decorators.update_server_connections(self.addr, len(self.clients))
                 if self.__loop_thread != None:
                     self.__loop_thread.join()
                     self.__loop_thread = None
