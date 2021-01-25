@@ -76,6 +76,7 @@ class Server:
         self.__loop_thread = None
 
         self.disconnect = "!DISCONNECT" # msg to disconnect
+        self.exit_command = "!EXIT"
 
         # create the actual server of the instance
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -113,13 +114,17 @@ class Server:
 
         (kind of a broadcast)
         """
-        command = input(">>> ")
-        cdr = [] # client data register
-        for i, client in self.clients.items():
-            client.send(command, self.dcf)
-            client_data = client.recv(self.bites, self.dcf)
-            cdr.append(client_data)
-        print(f"{self.__colors.INFO}{command} sended to {len(cdr)} clients{self.__colors.ENDC}")
+        print("Remember to type !EXIT for going back to the menu...")
+        while True:
+            command = input(">>> ")
+            if command == self.exit_command:
+                break
+            cdr = [] # client data register
+            for i, client in self.clients.items():
+                client.send(command, self.dcf)
+                client_data = client.recv(self.bites, self.dcf)
+                cdr.append(client_data)
+            print(f"{self.__colors.INFO}{command} sended to {len(cdr)} clients{self.__colors.ENDC}")
 
 
     def __loop(self):
