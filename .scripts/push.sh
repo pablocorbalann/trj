@@ -4,11 +4,12 @@
 #
 # To run this script use:
 #   sh push.sh <commit-flag> <commit-msg>
-if ![ -x "$(command -v git)"]
-then
-  echo "ERROR: git is not installed..."
+#
+if ! [ -x "$(command -v git)" ]; then
+  echo 'Error: git is not installed.' >&2
   exit 1
-fi 
+fi
+
 git pull
 rm -rf client/trojan/*.o
 git add .
