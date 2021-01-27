@@ -24,7 +24,6 @@ def print_server_options(options):
         [n] message3
     """
     colors = decorators.Colors()
-    print(f"{colors.INFO}[0]{colors.ENDC} Close the server...")
     for i, option in options.items():
         print(f"{colors.INFO}[{i}]{colors.ENDC} {option[1]}")
 
@@ -86,15 +85,23 @@ class Server:
 
         # colors
         self.__colors = decorators.Colors()
+
+        # loop hash for the options
+        self.loop_hash = {
+            0: (self.__close, "Close the server"),
+            1: (self.__send_to_all_clients, "Broadcast a message")
+        }
     
 
     def __close(self):
         """
         Closes all the clients and then closes the server and exits the app.
         """
-        for client in range(self.clients):
+        for client in self.clients.values():
             client.close()
-        exit()
+        self.clients = []
+        print("Press CTRL+C 2 times to exit the server...")
+        decorators.exit()
 
     def __send_to_all_clients(self):
         """
@@ -122,21 +129,17 @@ class Server:
         """
         looping = True
         # create the simple hash
-        loop_hash = {
-            1: (self.__send_to_all_clients, "Send a message to all the clients")
-            
-        }
         while looping:
             option = 0
             # Print the options
-            print_server_options(loop_hash)
+            print_server_options(self.loop_hash)
             option = request_server_option()
             # Get the option and start the hash map 
             try:
                 if option == 0:
                     self.__close()
                 else:
-                    loop_hash[option][0]() # the position 0 is the function
+                    self.loop_hash[option][0]() # the position 0 is the function
             except KeyError as e:
                 print(f"{self.__colors.ERR}Invalid option... {option}{self.__colors.ENDC}")
             except Exception as e:
@@ -170,7 +173,7 @@ class Server:
         """
         # start the server and listen it
         self.server.listen()
-        print(f"[LISTENING]: Server is listening on {self.addr}")
+        decorators.update_server_connections(self.addr, len(self.clients))
         running = True
         client_counter = 0
         while running:
@@ -181,9 +184,8 @@ class Server:
                 # create the thread for the self.handle_client method
                 thread = threading.Thread(target=self.__handle_client, args=[client_counter, client_configuration])
                 thread.start()
-                print(f"[ACTIVE CONNECTIONS] {len(self.clients)}")
-                # check if the loop thread is already working, if it's restart it.
                 decorators.update_server_connections(self.addr, len(self.clients))
+                # check if the loop thread is already working, if it's restart it.
                 if self.__loop_thread != None:
                     # If the loop thread is not equal to none, we should end this 
                     # thread and reset it to None.

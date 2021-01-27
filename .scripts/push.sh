@@ -3,7 +3,7 @@
 # as the C object options.
 #
 # To run this script use:
-#   sh push.sh <commit-flag> <commit-msg>
+#   sh push.sh <commit-flag> "<commit-msg>"
 #
 if ! [ -x "$(command -v git)" ]; then
   echo 'Error: git is not installed.' >&2

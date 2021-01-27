@@ -5,6 +5,7 @@
 import os
 import platform
 import shutil
+import sys
 
 class Colors:
     """
@@ -18,6 +19,10 @@ class Colors:
 
 def clear_screen():
     os.system("clear" if platform.system().lower() in ["linux", "java"] else "cls")
+
+def exit(code=0):
+    """Exits the complete app"""
+    sys.exit(code)
 
 def print_decorated(ts, text):
     """
@@ -57,4 +62,3 @@ def update_server_connections(server_addr, active_connections=0):
     active_connections = f"ACTIVE CONNECTIONS: {active_connections}"
     lac = len(active_connections) + len(str(server_addr)) # lac stands for len of active connections (padXY)
     print(f"{' ' * (ts.columns - lac)}{c.INFO}{active_connections}{c.ENDC}")
-    
