@@ -87,9 +87,9 @@ class Server:
         self.__colors = decorators.Colors()
 
         # loop hash for the options
-        self.loop_hash = {
-            0: (self.__close, "Close the server"),
-            1: (self.__send_to_all_clients, "Broadcast a message")
+        self.__loop_func_hash = {
+            0: self.__close,
+            1: self.__send_to_all_clients
         }
     
 
@@ -121,7 +121,6 @@ class Server:
                 cdr.append(client_data)
             print(f"{self.__colors.INFO}{command} sended to {len(cdr)} clients{self.__colors.ENDC}")
 
-
     def __loop(self):
         """
         This method is used to loop the options and depending on what the
@@ -130,20 +129,24 @@ class Server:
         looping = True
         # create the simple hash
         while looping:
-            option = 0
+            key = 0
             # Print the options
-            print_server_options(self.loop_hash)
-            option = request_server_option()
+            decorators.print_server_options(decorators.get_hash())
+            key = request_server_option()
             # Get the option and start the hash map 
             try:
-                if option == 0:
+                if key == 0:
                     self.__close()
+                    decorators.exit()
                 else:
-                    self.loop_hash[option][0]() # the position 0 is the function
+                    print(f"Executing function {key}...")
+                    self.__loop_func_hash[key]() # the position 0 is the function
             except KeyError as e:
                 print(f"{self.__colors.ERR}Invalid option... {option}{self.__colors.ENDC}")
+                self.__close()
             except Exception as e:
                 print(f"{self.__colors.FAIL}Internal crash at looping options... {e}{self.__colors.ENDC}")
+                self.__close()
 
 
     def __handle_client(self, client_id, conf):

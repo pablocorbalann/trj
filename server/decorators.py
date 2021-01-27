@@ -24,6 +24,28 @@ def exit(code=0):
     """Exits the complete app"""
     sys.exit(code)
 
+def print_server_options(options):
+    """
+    This function is used to print the server options using a format. It uses
+    a parameter :param options: that has the form of:
+
+        {
+            1: message1,
+            2: message2,
+            ...
+            n: messagen
+        }
+
+    And prints it like:
+••••••••
+        [1] message1
+        [2] message2
+        [n] message3
+    """
+    colors = Colors()
+    for i, option in options.items():
+        print(f"{colors.INFO}[{i}]{colors.ENDC} {option}")
+
 def print_decorated(ts, text):
     """
     Prints the text in a decorated way.
@@ -45,6 +67,24 @@ def print_decorated(ts, text):
         print(f"{separator}{text}{spaces}{separator}")
         
 
+def get_hash():
+    """
+    Returns the hash map of options the server can take.
+
+    EG
+        
+        {
+            1: name 1,
+            2: name 2,
+            ...
+            n: name n
+        }
+    """
+    return {
+        0: "Close the server",
+        1: "Broadcast a message"
+    }
+
 def update_server_connections(server_addr, active_connections=0):
     """
     Prints in the screen some information about the server.
@@ -62,3 +102,5 @@ def update_server_connections(server_addr, active_connections=0):
     active_connections = f"ACTIVE CONNECTIONS: {active_connections}"
     lac = len(active_connections) + len(str(server_addr)) # lac stands for len of active connections (padXY)
     print(f"{' ' * (ts.columns - lac)}{c.INFO}{active_connections}{c.ENDC}")
+    # print the options of the server
+    print(print_server_options(get_hash()))
