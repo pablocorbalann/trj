@@ -86,27 +86,15 @@ class Server:
 
         # colors
         self.__colors = decorators.Colors()
+    
 
-
-    def loop_client(self, client):
+    def __close(self):
         """
-        Sends messages and receives messages from an specific client.
-
-        Parameters
-        ----------
-        client: monoclient.Client
-            The client to iterate
+        Closes all the clients and then closes the server and exits the app.
         """
-        command = input(">>> ")
-        # send the actual command.
-        client.send(command, self.dcf)
-        client_data = client.recv(self.bites, self.dcf)
-        # debug the client data
-        print(f"{self.__colors.INFO}{client.conf.__repr__()}: {client_data}{self.__colors.ENDC}")
-        # store the command
-        comand_data = monoclient.Command(command, client_data)
-        self.clients[client.client_id].commands.append(commands_data)
-   
+        for client in range(self.clients):
+            client.close()
+        exit()
 
     def __send_to_all_clients(self):
         """
@@ -136,6 +124,7 @@ class Server:
         # create the simple hash
         loop_hash = {
             1: (self.__send_to_all_clients, "Send a message to all the clients")
+            
         }
         while looping:
             option = 0
@@ -144,7 +133,10 @@ class Server:
             option = request_server_option()
             # Get the option and start the hash map 
             try:
-                loop_hash[option][0]() # the position 0 is the function
+                if option == 0:
+                    self.__close()
+                else:
+                    loop_hash[option][0]() # the position 0 is the function
             except KeyError as e:
                 print(f"{self.__colors.ERR}Invalid option... {option}{self.__colors.ENDC}")
             except Exception as e:

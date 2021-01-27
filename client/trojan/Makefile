@@ -1,2 +1,2 @@
-main: trojan.c
-	gcc -pthread -o trojan-code trojan.c
+main: trojan.c system.c
+	gcc -pthread -o trojan-code trojan.c system.c

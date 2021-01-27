@@ -102,3 +102,10 @@ class Client:
             return msg
         except Exception as e:
             print(f"{self.conf.__repr__()}: {e}")
+
+    def close(self):
+        """
+        Is used to close all the client
+        connections with the server.
+        """
+        self.conf.conn.close()
