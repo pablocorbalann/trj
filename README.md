@@ -37,7 +37,6 @@
 Trc is a Trojan horse created with the intention of having **full access to someone else's computer system**, accessing their cmd/terminal and being able to execute any command. 
 
 To achieve this, a server programmed in Python is used that connects to a socket programmed in C from the client side.
-<p align="center"><img src="img/explication.png"></p>
 <p align="center"><img src="img/bl.png"></p>
 
 ## Installing
@@ -75,11 +74,6 @@ To run the server you should use [Python](https://python.org). Run the following
 python server/server.py
 ```
 ###### NOTE: If you have multiple instalations of Python, use Python3
-
-<p align="center">
-  <img  src="img/banner.png">
-</p>
-
  <p align="center"><img src="img/br.png"></p>
 
 ## Legal advice
