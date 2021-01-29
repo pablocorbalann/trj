@@ -47,29 +47,80 @@ def request_server_option():
     return option
 
 
+class ServerConfiguration():
+    """
+    The class is used to handle all the configuration for an specific 
+    server, and capsule it.
+    """
+    def __init__(self, port, ip, dcf, bites):
+        """
+        The constructor method for the ServerConfiguration class.
+
+        From here all the attributes of the class are created.
+        
+        Parameters
+        ----------
+        port: int
+            The port of the server
+        ip: str
+            The ip address of the server
+        dcf: str
+            The format the server uses 
+        bites: int
+            The maximum number of bites of the 
+            server.
+        """
+        self.__port = port
+        self.__ip = ip
+        self.__dcf = dcf
+        self.__bites = bites
+    
+    def __repr__(self):
+        """
+        Returns a short representation of all the information.
+        """
+        return f"{self.get_port()}: {self.get_ip()}"
+
+    def setup_server(self):
+        """
+        Set ups the complete server using the return statement.
+
+        Returns
+        -------
+            port, ip, dcf, bites
+        """
+        return self.get_port(), self.get_ip(), self.get_dcf(), self.get_bites()
+
+    def get_port(self):
+        return self.__port
+    
+    def get_ip(self):
+        return self.__ip 
+
+    def get_dcf(self):
+        return self.__dcf
+
+    def get_bites(self):
+        return self.__bites
+       
+
+
 class Server:
     """
     This class is used to manage all the servers trj uses and to manage
     the sockets.
     """
-    def __init__(self, port, conf):
+    def __init__(self, conf):
         """
         This is the constructor method for the Server class, from here all the
         attributes of the class are created
 
-        Parameters:
-            port => The port the server should connect to
-            conf => A tuple containing the configuration of the server
-                (
-                    server ip,
-                    server decode format,
-                    server max bites
-                )
+        Parameters
+        ----------
+        conf: ServerConfiguration
+            The configuration of the sever
         """
-        self.port = port
-        self.ip = conf[0]
-        self.dcf = conf[1] # dcf = DeCode-Format
-        self.bites = conf[2]
+        self.port, self.ip, self.dcf, self.bites = conf.setup_server()
 
         self.addr = (self.ip, self.port)
         self.__loop_thread = None
@@ -121,6 +172,7 @@ class Server:
                 cdr.append(client_data)
             print(f"{self.__colors.INFO}{command} sended to {len(cdr)} clients{self.__colors.ENDC}")
 
+
     def __loop(self):
         """
         This method is used to loop the options and depending on what the
@@ -167,6 +219,7 @@ class Server:
         # append the connection to the clients
         self.clients[client_id] = client
 
+
     def start(self):
         """
         This method is used to start the server itself using the .listen() method
@@ -178,16 +231,16 @@ class Server:
         self.server.listen()
         decorators.update_server_connections(self.addr, len(self.clients))
         running = True
-        client_counter = 0
         while running:
             try:
-                client_counter += 1
                 conn, addr = self.server.accept()
                 client_configuration = monoclient.ClientConfiguration(conn, addr)
+                # ct stands for client total (the counter of the client)
+                ct = len(self.clients)
                 # create the thread for the self.handle_client method
-                thread = threading.Thread(target=self.__handle_client, args=[client_counter, client_configuration])
+                thread = threading.Thread(target=self.__handle_client, args=[ct, client_configuration])
                 thread.start()
-                decorators.update_server_connections(self.addr, len(self.clients))
+                decorators.update_server_connections(self.addr, ct)
                 # check if the loop thread is already working, if it's restart it.
                 if self.__loop_thread != None:
                     # If the loop thread is not equal to none, we should end this 
@@ -199,18 +252,25 @@ class Server:
                 # report the bug informing the user
                 print(f"[SERVER CRASH]: Fatal error, {e}")
 
+def main(port, ip, dcf, bites):
+    """
+    This function actually starts running the server, using 4
+    paramteres.
+    """
+    server = Server(ServerConfiguration(port, ip, dcf, bites))
+    server.start()
+
+
 if __name__ == '__main__':
-    # actually run the server
-    sconf = [
-        socket.gethostbyname(socket.gethostname()), 
-        "utf-8",
-        128
-    ]
-    # check if the user did python3 server.py <ip> <port>
     port = 8080
-    if len(sys.argv) >= 3:
-        sconf[0] = sys.argv[1]
-        port = sys.argv[2]
+    ip = socket.gethostbyname(socket.gethostname())
+    dcf = "utf-8"
+    bites = 128
+    # actually run the server
+    # check if the user did python3 server.py <ip> <port>
     # create the server
-    s = Server(int(port), sconf)
-    s.start()
+    arg = sys.argv
+    if len(arg) >= 3:
+        ip = arg[1]
+        port = int(arg[2])
+    main(port, ip, dcf, bites)
