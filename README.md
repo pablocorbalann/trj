@@ -1,4 +1,4 @@
-# Important note: I'm still developing trj. Let's try to get an alpha as soon as posible.
+### ⚠️ Important note: I'm still developing trj. Let's try to get an alpha as soon as posible.
 
 <p align="center"><img alt="TRJ" src="img/logo.png"></p>
 
@@ -88,7 +88,7 @@ Use tcr **at your own risk**, I am not responsible for any unethical use you mak
 - ~Create a socket connection using C from the client to the server (tcp)~
 - ~Implement this connection in a simple text chat~
 - Upgrade the server so that it can manage more than one client at the same time
-- Create the trojan in C inside `client/trojan`
+- ~Create the trojan in C inside `client/trojan`~
 - Make the trojan run in a different thread
 - Include non-trojan code in a second thread, so that the user doesn't notice about the trojan
 - Sport the configuration (yaml, json...)
