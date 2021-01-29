@@ -5,27 +5,6 @@ import sys
 import monoclient
 import decorators
 
-def print_server_options(options):
-    """
-    This function is used to print the server options using a format. It uses
-    a parameter :param options: that has the form of:
-
-        {
-            1: (function_1, message1),
-            2: (function_2, message2),
-            ...
-            n: (function_n, messagen)
-        }
-
-    And prints it like:
-        
-        [1] message1
-        [2] message2
-        [n] message3
-    """
-    colors = decorators.Colors()
-    for i, option in options.items():
-        print(f"{colors.INFO}[{i}]{colors.ENDC} {option[1]}")
 
 def request_server_option():
     """
@@ -183,7 +162,7 @@ class Server:
         while looping:
             key = 0
             # Print the options
-            decorators.print_server_options(decorators.get_hash())
+            decorators.print_server_options(decorators.get_hash()) 
             key = request_server_option()
             # Get the option and start the hash map 
             try:
@@ -191,7 +170,7 @@ class Server:
                     self.__close()
                     decorators.exit()
                 else:
-                    print(f"Executing function {key}...")
+                    print(f"Eecuting function {key}...")
                     self.__loop_func_hash[key]() # the position 0 is the function
             except KeyError as e:
                 print(f"{self.__colors.ERR}Invalid option... {option}{self.__colors.ENDC}")
@@ -229,7 +208,6 @@ class Server:
         """
         # start the server and listen it
         self.server.listen()
-        decorators.update_server_connections(self.addr, len(self.clients))
         running = True
         while running:
             try:
@@ -240,11 +218,10 @@ class Server:
                 # create the thread for the self.handle_client method
                 thread = threading.Thread(target=self.__handle_client, args=[ct, client_configuration])
                 thread.start()
-                decorators.update_server_connections(self.addr, ct)
                 # check if the loop thread is already working, if it's restart it.
                 if self.__loop_thread != None:
                     # If the loop thread is not equal to none, we should end this 
-                    # thread and reset it to None.
+                    # thread and reset it to None.o
                     self.__loop_thread.join()
                 self.__loop_thread = threading.Thread(target=self.__loop)
                 self.__loop_thread.start()

@@ -91,6 +91,7 @@ def update_server_connections(server_addr, active_connections=0):
 
     It also formats it.
     """
+    print("here")
     # clear the screen
     clear_screen()
     c = Colors()
