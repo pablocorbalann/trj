@@ -14,4 +14,4 @@ git pull
 rm -rf client/trojan/*.o
 git add .
 git commit -m "$1: $2"
-git push
+git push --set-upstream origin dev
