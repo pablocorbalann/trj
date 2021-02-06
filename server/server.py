@@ -162,7 +162,7 @@ class Server:
         while looping:
             key = 0
             # Print the options
-            decorators.print_server_options(decorators.get_hash()) 
+            # decorators.print_server_options(decorators.get_hash()) 
             key = request_server_option()
             # Get the option and start the hash map 
             try:
@@ -194,7 +194,7 @@ class Server:
         """
         client = monoclient.Client(client_id, conf)
         # some debug from the server
-        print(f"{self.__colors.INFO}[NEW CONNECTION] {client.conf.addr} connected.{self.__colors.ENDC}")
+        print(f"\n{self.__colors.INFO}[NEW CONNECTION] {client.conf.addr} connected.{self.__colors.ENDC}")
         # append the connection to the clients
         self.clients[client_id] = client
 
@@ -223,6 +223,8 @@ class Server:
                     # If the loop thread is not equal to none, we should end this 
                     # thread and reset it to None.o
                     self.__loop_thread.join()
+                    self.__loop_thread = None
+                # Set the loop thread to  the actual thread
                 self.__loop_thread = threading.Thread(target=self.__loop)
                 self.__loop_thread.start()
             except Exception as e:
