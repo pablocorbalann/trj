@@ -24,6 +24,24 @@ def exit(code=0):
     """Exits the complete app"""
     sys.exit(code)
 
+def setup_yaml(yaml):
+    """
+    This function setups a server using a yaml file.
+
+    Returns
+    -------
+    ip, port, dcf, bites
+    """
+    f = yaml["server"]
+    return (
+        f["ip"],
+        f["port"],
+        f["decode-format"],
+        f["max-bites"],
+        f["disconnect-message"],
+        f["back-to-menu-message"]
+    )
+
 def print_server_options(options):
     """
     This function is used to print the server options using a format. It uses
@@ -37,7 +55,6 @@ def print_server_options(options):
         }
 
     And prints it like:
-••••••••
         [1] message1
         [2] message2
         [n] message3

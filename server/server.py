@@ -4,6 +4,7 @@ import sys
 
 import monoclient
 import decorators
+import loads
 
 
 def request_server_option():
@@ -31,7 +32,7 @@ class ServerConfiguration():
     The class is used to handle all the configuration for an specific 
     server, and capsule it.
     """
-    def __init__(self, port, ip, dcf, bites):
+    def __init__(self, port, ip, dcf, bites, dmsg, emsg):
         """
         The constructor method for the ServerConfiguration class.
 
@@ -53,6 +54,8 @@ class ServerConfiguration():
         self.__ip = ip
         self.__dcf = dcf
         self.__bites = bites
+        self.__disconnect_msg = dmsg
+        self.__exit_msg = emsg
     
     def __repr__(self):
         """
@@ -68,7 +71,14 @@ class ServerConfiguration():
         -------
             port, ip, dcf, bites
         """
-        return self.get_port(), self.get_ip(), self.get_dcf(), self.get_bites()
+        return (
+            self.get_port(),
+            self.get_ip(),
+            self.get_dcf(),
+            self.get_bites(),
+            self.get_dmsg(),
+            self.get_emsg()
+        )
 
     def get_port(self):
         return self.__port
@@ -81,7 +91,12 @@ class ServerConfiguration():
 
     def get_bites(self):
         return self.__bites
-       
+    
+    def get_dmsg(self):
+        return self.__disconnect_msg
+
+    def get_emsg(self):
+        return self.__exit_msg
 
 
 class Server:
@@ -99,13 +114,13 @@ class Server:
         conf: ServerConfiguration
             The configuration of the sever
         """
-        self.port, self.ip, self.dcf, self.bites = conf.setup_server()
+        self.port, self.ip, self.dcf, self.bites, dmsg, emsg = conf.setup_server()
 
         self.addr = (self.ip, self.port)
         self.__loop_thread = None
 
-        self.disconnect = "!DISCONNECT" # msg to disconnect
-        self.exit_command = "!EXIT"
+        self.disconnect = dmsg # msg to disconnect
+        self.exit_command = emsg
 
         # create the actual server of the instance
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -122,7 +137,6 @@ class Server:
             1: self.__send_to_all_clients
         }
     
-
     def __close(self):
         """
         Closes all the clients and then closes the server and exits the app.
@@ -162,7 +176,7 @@ class Server:
         while looping:
             key = 0
             # Print the options
-            decorators.print_server_options(decorators.get_hash()) 
+            # decorators.print_server_options(decorators.get_hash()) 
             key = request_server_option()
             # Get the option and start the hash map 
             try:
@@ -194,7 +208,7 @@ class Server:
         """
         client = monoclient.Client(client_id, conf)
         # some debug from the server
-        print(f"{self.__colors.INFO}[NEW CONNECTION] {client.conf.addr} connected.{self.__colors.ENDC}")
+        print(f"\n{self.__colors.INFO}[NEW CONNECTION] {client.conf.addr} connected.{self.__colors.ENDC}")
         # append the connection to the clients
         self.clients[client_id] = client
 
@@ -223,26 +237,28 @@ class Server:
                     # If the loop thread is not equal to none, we should end this 
                     # thread and reset it to None.o
                     self.__loop_thread.join()
+                    self.__loop_thread = None
+                # Set the loop thread to  the actual thread
                 self.__loop_thread = threading.Thread(target=self.__loop)
                 self.__loop_thread.start()
             except Exception as e:
                 # report the bug informing the user
                 print(f"[SERVER CRASH]: Fatal error, {e}")
 
-def main(port, ip, dcf, bites):
+def main(port, ip, dcf, bites, dmsg, emsg):
     """
     This function actually starts running the server, using 4
     paramteres.
     """
-    server = Server(ServerConfiguration(port, ip, dcf, bites))
+    server_configuration = ServerConfiguration(port, ip, dcf, bites, dmsg, emsg)
+    if "-c" in sys.argv:
+        print(f"SERVER CONFIGURATION: {server_configuration.setup_server()}")
+    server = Server(server_configuration)
     server.start()
 
 
 if __name__ == '__main__':
-    port = 8080
-    ip = socket.gethostbyname(socket.gethostname())
-    dcf = "utf-8"
-    bites = 128
+    ip, port, dcf, bites, dmsg, emsg = decorators.setup_yaml(loads.load_configuration())
     # actually run the server
     # check if the user did python3 server.py <ip> <port>
     # create the server
@@ -250,4 +266,4 @@ if __name__ == '__main__':
     if len(arg) >= 3:
         ip = arg[1]
         port = int(arg[2])
-    main(port, ip, dcf, bites)
+    main(port, ip, dcf, bites, dmsg, emsg)

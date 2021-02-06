@@ -28,6 +28,7 @@
   - [Warranty](#warranty)
 - [Todo](#todo)
 - [Advanced](#advanced)
+  - [Modify the configuration of TRJ](#modify-the-configuration-of-trj)
   - [Modify the server IP and PORT using CLI](#modify-the-server-ip-and-port-using-cli)
   - [Compiling just the trojan code of trj](#compile-just-the-trojan-code)
   
@@ -91,11 +92,28 @@ Use tcr **at your own risk**, I am not responsible for any unethical use you mak
 - ~Create the trojan in C inside `client/trojan`~
 - Make the trojan run in a different thread
 - Include non-trojan code in a second thread, so that the user doesn't notice about the trojan
-- Sport the configuration (yaml, json...)
+- **>** Export the configuration (yaml, json...)
 - Add flags to the server (port, ip, execute, sudo...)
 - Generate executables
 
 ## Advanced
+### Modify the configuration of trj
+To configurate the server and the client, check out the `configuration.yaml` file. There you have all the keys needed to configurate the complete server and the complete client. For example:
+
+- The port of the server
+- The IP adress
+- The decodification format
+
+And much more.
+
+This configuration is loaded automatically.
+
+If you want to check the configuration (in the server) you can use the `-c` flag.
+```shell
+cd server
+python3 server.py -c
+```
+
 ### Modify the server IP and port using CLI
 You can modify the server IP and the server PORT from the console itself. Instead of running:
 ```shell
