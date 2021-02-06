@@ -84,6 +84,7 @@ int socketTest()
   }
 }
 
+// remove the socketMain to 'main'
 int socketMain()
 {
   socketStart();
@@ -93,4 +94,5 @@ int socketMain()
 int main()
 {
   socketMain();
+  return 0;
 }
