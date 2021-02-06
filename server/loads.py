@@ -14,8 +14,9 @@ def load_configuration():
         The Yaml file setted up as a structure.
     """
     route = "../configuration.yaml"
-    with open(route) as f:
-        return yaml.load(f, Loader=yaml.FullLoader())
+    with open(route, "r") as f:
+        yaml_file = yaml.load(f, Loader=yaml.FullLoader)
+        return yaml_file
 
 if __name__ == "__main__":
     print(load_configuration())

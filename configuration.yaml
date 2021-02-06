@@ -1,6 +1,6 @@
 server:
   port: 8080
-  ip-address: "127.0.0.1"
+  ip: "127.0.0.1"
   decode-format: "utf-8"
   max-bites: 128
   disconnect-message: "!DISCONNECT"
