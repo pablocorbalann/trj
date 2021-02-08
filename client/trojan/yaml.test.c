@@ -5,7 +5,7 @@ int main()
 {
   char c[1000];
   FILE *f;
-  if ((f = fopen("configuration.yaml", "r")) == NULL)
+  if ((f = fopen("../../configuration.yaml", "rb")) == NULL)
   {
     printf("Error opening the file...\n");
     exit(1);
