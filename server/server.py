@@ -153,7 +153,7 @@ class Server:
 
         (kind of a broadcast)
         """
-        print("Remember to type !EXIT for going back to the menu...")
+        print(f"Remember to type {self.exit_command} for going back to the menu...")
         while True:
             command = input(">>> ")
             if command == self.exit_command:

@@ -32,14 +32,15 @@ def setup_yaml(yaml):
     -------
     ip, port, dcf, bites
     """
-    f = yaml["server"]
+    f = yaml["connection"]
+    fs = yaml["server"]
     return (
         f["ip"],
         f["port"],
-        f["decode-format"],
-        f["max-bites"],
-        f["disconnect-message"],
-        f["back-to-menu-message"]
+        fs["decode-format"],
+        fs["max-bites"],
+        fs["disconnect-message"],
+        fs["back-to-menu-message"]
     )
 
 def print_server_options(options):

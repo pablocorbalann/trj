@@ -1,7 +1,10 @@
-server:
+connection:
   port: 8080
-  ip: "127.0.0.1"
+  ip: "127.0.1.1"
+server:
   decode-format: "utf-8"
   max-bites: 128
   disconnect-message: "!DISCONNECT"
   back-to-menu-message: "!EXIT"
+client:
+  message-size: 100
