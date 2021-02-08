@@ -4,6 +4,7 @@
 #include <arpa/inet.h> // inet_pton() function
 #include <sys/socket.h> // Sockets
 #include <netinet/in.h> // Adress family (AF_INET)A
+#include "trojan.h"
 #include "system.h"
 
 #define IP_ADDRESS "127.0.1.1"
@@ -84,15 +85,3 @@ int socketTest()
   }
 }
 
-// remove the socketMain to 'main'
-int socketMain()
-{
-  socketStart();
-  return 0;
-}
-
-int main()
-{
-  socketMain();
-  return 0;
-}
