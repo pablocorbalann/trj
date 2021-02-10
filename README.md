@@ -138,3 +138,9 @@ After that you could run **just the trojan part of trj** using
 ```shell
 ./trojan-code
 ```
+### Solving GTK3.0 installation errors
+The client needs the library GTK+-3.0, and you could have some problems installing it, so I have developed this short script that automates this process.
+###### NOTE: It has to be run as an administrator
+```shell
+sudo su && sh .scripts/gtk.sh && exit
+```
