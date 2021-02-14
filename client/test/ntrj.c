@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
   gtk_signal_connect(GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC(destroy), NULL);
 
-  gtk_container_add(GKT_CONTAINER (window), image);
+  gtk_container_add(GTK_CONTAINER (window), image);
   gtk_widget_show_all(window);
   gtk_main();
   return 0;
