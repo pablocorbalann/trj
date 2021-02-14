@@ -1,12 +1,9 @@
 LIBS+=-pthread
+CFLAGS += -g
 BUILD_DIR := build
 
 include test/test.mk
 include trojan/trojan.mk
-
-CFLAGS += -g
-INC_DIRS := $(shell find $(SRC_DIRS) -type d)
-INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 all: trojan test
 
