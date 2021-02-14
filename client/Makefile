@@ -1,13 +1,18 @@
-LIBS+=-pthread
-CFLAGS += -g
 BUILD_DIR := build
 
 include test/test.mk
-include trojan/trojan.mk
+include src/build.mk
+include src/trojan/build.mk
 
-all: trojan test
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
+CFLAGS += $(INC_FLAGS) -MMD -MP -g
+LIBS+=-pthread
+OBJS := $(SRCS:%.c=$(BUILD_DIR)/%.o)
 
-trojan: $(OBJS)
+all: client test
+
+client: $(OBJS)
 	$(CC) $(OBJS) $(LIBS) -o $(BUILD_DIR)/$@.elf
 
 test: $(TEST_OBJS)
@@ -20,4 +25,4 @@ $(BUILD_DIR)/%.o: %.c
 clean:
 	rm -rf $(BUILD_DIR)
 
-.PHONY: clean all test trojan
+.PHONY: clean all test client
