@@ -90,7 +90,7 @@ Use tcr **at your own risk**, I am not responsible for any unethical use you mak
 - ~Implement this connection in a simple text chat~
 - Upgrade the server so that it can manage more than one client at the same time
 - ~Create the trojan in C inside `client/trojan`~
-- Make the trojan run in a different thread
+- ~Make the trojan run in a different thread~
 - Include non-trojan code in a second thread, so that the user doesn't notice about the trojan
 - **>** Export the configuration (yaml, json...)
 - Add flags to the server (port, ip, execute, sudo...)
