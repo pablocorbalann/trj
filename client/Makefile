@@ -1,3 +1,22 @@
+# This file is part of trj: github.com/pblcc/trj
+#
+# It's the makefile of the client, that contains all the commands related 
+# to compiling the client itself, that has been built using the C programming language.
+#
+# For information about how does this file works you should read this comment by 
+# @mpzaborski (thanks for your amazing contribution)
+#
+# 		https://github.com/pblcc/trj/issues/4#issuecomment-778865518
+#
+# You can find more relevant information about how to use this makefile in the README.md
+# file of the project.
+#
+# Basic commands:
+# 	make all
+# 	make test
+# 	make trojan
+#
+# !!
 # Please do not touch this file if you don't now what you are doing, 
 # the makefile can ruin all the client...
 
