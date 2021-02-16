@@ -57,18 +57,27 @@ git clone https://github.com/pblcc/trj
 ```
 
 ### Compiling the client
-For compiling the client we use a C compiler as [gcc](https://gcc.gnu.org) and [CMake](https://cmake.org). Run the following commands:
+For compiling the client we use a C compiler as [gcc](https://gcc.gnu.org) and a Makefile. Run the following commands:
 ```shell
 cd client/
 ```
 ```shell
-make
+make all
 ```
-Now you can start the client as:
+Now you move inside the directory using
+```shell
+cd build
 ```
-./client
+And run the executable as:
+```shell
+./client.test
 ```
-
+###### **NOTE**: Using make all you compile the complete client, if you just want to compile the trojan part of the code you can run make client, and if you want to compile the tests of trj use make test
+```shell
+make all # Compiles all the client
+make client # Just compiles the actual code of the trj client
+make test # Just compiles the tests of trj
+```
 ### Running the server
 To run the server you should use [Python](https://python.org). Run the following commands:
 ```shell
