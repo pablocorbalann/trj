@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-#include "trojan/trojan.h"
+#include "trojan.h"
 
 void *startTrojan(void *args)
 {

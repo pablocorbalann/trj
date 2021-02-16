@@ -176,7 +176,7 @@ class Server:
         while looping:
             key = 0
             # Print the options
-            # decorators.print_server_options(decorators.get_hash()) 
+            decorators.print_server_options(decorators.get_hash()) 
             key = request_server_option()
             # Get the option and start the hash map 
             try:
