@@ -11,7 +11,7 @@ if ! [ -x "$(command -v git)" ]; then
 fi
 
 git pull
-rm -rf client/trojan/*.o
+rm -rf client/build
 git add .
 git commit -m "$1: $2"
-git push --set-upstream origin dev
+git push
