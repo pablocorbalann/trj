@@ -96,6 +96,7 @@ Use tcr **at your own risk**, I am not responsible for any unethical use you mak
 ## Todo
 - ~Create a small server using in Python~
 - ~Create a socket connection using C from the client to the server (tcp)~
+- Include a timeout in the server so that it can wait  
 - ~Implement this connection in a simple text chat~
 - Upgrade the server so that it can manage more than one client at the same time
 - ~Create the trojan in C inside `client/trojan`~

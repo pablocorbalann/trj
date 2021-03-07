@@ -21,17 +21,18 @@ def request_server_option():
     try:
         option = int(input(f"{colors.OK}Select what do you want to do: {colors.ENDC}"))
     except ValueError as e:
-        print(f"{colors.ERR}Error, invalid value for base 10 {e}{self.__colors.ENDC}")
+        print(f"{colors.ERR}Error, invalid value for base 10 {e}{colors.ENDC}")
     except Exception as e:
         print(f"{colors.ERR}Error, invalid iteral / option... {e}{colors.ENDC}")
     return option
 
 
-class ServerConfiguration():
+class ServerConfiguration:
     """
     The class is used to handle all the configuration for an specific 
     server, and capsule it.
     """
+
     def __init__(self, port, ip, dcf, bites, dmsg, emsg):
         """
         The constructor method for the ServerConfiguration class.
@@ -56,7 +57,7 @@ class ServerConfiguration():
         self.__bites = bites
         self.__disconnect_msg = dmsg
         self.__exit_msg = emsg
-    
+
     def __repr__(self):
         """
         Returns a short representation of all the information.
@@ -82,16 +83,16 @@ class ServerConfiguration():
 
     def get_port(self):
         return self.__port
-    
+
     def get_ip(self):
-        return self.__ip 
+        return self.__ip
 
     def get_dcf(self):
         return self.__dcf
 
     def get_bites(self):
         return self.__bites
-    
+
     def get_dmsg(self):
         return self.__disconnect_msg
 
@@ -104,6 +105,7 @@ class Server:
     This class is used to manage all the servers trj uses and to manage
     the sockets.
     """
+
     def __init__(self, conf):
         """
         This is the constructor method for the Server class, from here all the
@@ -119,14 +121,15 @@ class Server:
         self.addr = (self.ip, self.port)
         self.__loop_thread = None
 
-        self.disconnect = dmsg # msg to disconnect
+        self.disconnect = dmsg  # msg to disconnect
         self.exit_command = emsg
 
         # create the actual server of the instance
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server.bind(self.addr) # bind the server to the addr
+        self.server.settimeout(10.0)
+        self.server.bind(self.addr)  # bind the server to the addr
 
-        self.clients = {} # stores configuration of each client
+        self.clients = {}  # stores configuration of each client
 
         # colors
         self.__colors = decorators.Colors()
@@ -136,12 +139,12 @@ class Server:
             0: self.__close,
             1: self.__send_to_all_clients
         }
-    
+
     def __close(self):
         """
         Closes all the clients and then closes the server and exits the app.
         """
-        for client in self.clients.values():
+        for client in self.clients:
             client.close()
         self.clients = []
         print("Press CTRL+C 2 times to exit the server...")
@@ -158,13 +161,15 @@ class Server:
             command = input(">>> ")
             if command == self.exit_command:
                 break
-            cdr = [] # client data register
+            cdr = []  # client data register
             for i, client in self.clients.items():
-                client.send(command, self.dcf)
-                client_data = client.recv(self.bites, self.dcf)
-                cdr.append(client_data)
+                try:
+                    client.send(command, self.dcf)
+                    client_data = client.recv(self.bites, self.dcf)
+                    cdr.append(client_data)
+                except socket.timeout as e:
+                    print(f"One client doesn't respond to the server: {client}")
             print(f"{self.__colors.INFO}{command} sended to {len(cdr)} clients{self.__colors.ENDC}")
-
 
     def __loop(self):
         """
@@ -176,7 +181,7 @@ class Server:
         while looping:
             key = 0
             # Print the options
-            decorators.print_server_options(decorators.get_hash()) 
+            decorators.print_server_options(decorators.get_hash())
             key = request_server_option()
             # Get the option and start the hash map 
             try:
@@ -185,14 +190,13 @@ class Server:
                     decorators.exit()
                 else:
                     print(f"Eecuting function {key}...")
-                    self.__loop_func_hash[key]() # the position 0 is the function
+                    self.__loop_func_hash[key]()  # the position 0 is the function
             except KeyError as e:
-                print(f"{self.__colors.ERR}Invalid option... {option}{self.__colors.ENDC}")
+                print(f"{self.__colors.ERR}Invalid option... {key}{self.__colors.ENDC}")
                 self.__close()
             except Exception as e:
                 print(f"{self.__colors.FAIL}Internal crash at looping options... {e}{self.__colors.ENDC}")
                 self.__close()
-
 
     def __handle_client(self, client_id, conf):
         """
@@ -212,7 +216,6 @@ class Server:
         # append the connection to the clients
         self.clients[client_id] = client
 
-
     def start(self):
         """
         This method is used to start the server itself using the .listen() method
@@ -225,6 +228,7 @@ class Server:
         running = True
         while running:
             try:
+                self.server.settimeout(None)
                 conn, addr = self.server.accept()
                 client_configuration = monoclient.ClientConfiguration(conn, addr)
                 # ct stands for client total (the counter of the client)
@@ -233,7 +237,7 @@ class Server:
                 thread = threading.Thread(target=self.__handle_client, args=[ct, client_configuration])
                 thread.start()
                 # check if the loop thread is already working, if it's restart it.
-                if self.__loop_thread != None:
+                if self.__loop_thread is not None:
                     # If the loop thread is not equal to none, we should end this 
                     # thread and reset it to None.o
                     self.__loop_thread.join()
@@ -245,10 +249,11 @@ class Server:
                 # report the bug informing the user
                 print(f"[SERVER CRASH]: Fatal error, {e}")
 
+
 def main(port, ip, dcf, bites, dmsg, emsg):
     """
     This function actually starts running the server, using 4
-    paramteres.
+    parameters.
     """
     server_configuration = ServerConfiguration(port, ip, dcf, bites, dmsg, emsg)
     if "-c" in sys.argv:

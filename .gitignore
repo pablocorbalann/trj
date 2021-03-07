@@ -160,6 +160,8 @@ dmypy.json
 *.gch
 *.pch
 
+.idea/
+
 # Libraries
 *.lib
 *.a
