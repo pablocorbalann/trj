@@ -14,4 +14,4 @@ git pull
 rm -rf client/build
 git add .
 git commit -m "$1: $2"
-git push
+git push origin dev
