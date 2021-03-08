@@ -41,7 +41,12 @@ To achieve this, a server programmed in Python is used that connects to a socket
 <p align="center"><img src="img/bl.png"></p>
 
 **THANKS TO ALL THE PERSONS THAT HAVE STARRED THE REPOSITORY!!!! LOVE YOU GUYS! ❤️**
-[![Stargazers repo roster for @pblcc/trj](https://reporoster.com/stars/pblcc/trj)](https://github.com/pblcc/trj/stargazers)
+
+<p align="center">
+  <a href="https://github.com/pblcc/trj/stargazers">
+    <img width="500px" src="https://reporoster.com/stars/pblcc/trj">
+  </a>
+</p>
 
 ## Installing
 
