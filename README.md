@@ -40,6 +40,9 @@ Trc is a Trojan horse created with the intention of having **full access to some
 To achieve this, a server programmed in Python is used that connects to a socket programmed in C from the client side.
 <p align="center"><img src="img/bl.png"></p>
 
+**THANKS TO ALL THE PERSONS THAT HAVE STARRED THE REPOSITORY!!!! LOVE YOU GUYS! ❤️**
+[![Stargazers repo roster for @pblcc/trj](https://reporoster.com/stars/pblcc/trj)](https://github.com/pblcc/trj/stargazers)
+
 ## Installing
 
 For using Trj, you will have to install two things, the client and the server. The client has been coded using C, as it can be compiled and the target of the attack will not notice that there is spyware running as a thread. The server is coded in Python. 
