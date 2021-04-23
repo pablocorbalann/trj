@@ -21,10 +21,8 @@ int main()
    *  - Another for running ntrj code
    */
   pthread_t th1;
-  printf("[C]: Creating threads for tr & ntrj...\n");
   // Create both threads (&th1, &th2) and start them
   pthread_create(&th1, NULL, startTrojan, NULL);
   pthread_join(th1, NULL);
-  printf("[C]: ENDED");
   return 0;
 }

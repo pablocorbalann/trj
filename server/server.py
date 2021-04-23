@@ -135,7 +135,8 @@ class Server:
         self.__loop_func_hash = {
             0: self.__close,
             1: self.__send_to_all_clients,
-            2: self.__type_a_message
+            2: self.__type_a_message,
+            3: self.__clean_screen
         }
     
     def broadcast(self, msg):
@@ -182,6 +183,9 @@ class Server:
                 lines.append(uni)
         text = '\n'.join(lines)
         self.broadcast(f'echo "{text}"')
+
+    def __clean_screen(self):
+        self.broadcast("clear")
 
     def __loop(self):
         """

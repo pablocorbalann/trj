@@ -98,10 +98,14 @@ def get_hash():
             n: name n
         }
     """
-    return {
-        0: "Close the server",
-        1: "Broadcast a message"
-    }
+    options = [
+        "Close the server",
+        "Broadcast a command",
+        "Send a message to all the clients",
+        "Clear the screen of the clients",
+    ]
+    return {k:options[k] for k in range(len(options))}
+
 
 def update_server_connections(server_addr, active_connections=0):
     """
