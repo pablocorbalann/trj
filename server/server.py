@@ -134,9 +134,18 @@ class Server:
         # loop hash for the options
         self.__loop_func_hash = {
             0: self.__close,
-            1: self.__send_to_all_clients
+            1: self.__send_to_all_clients,
+            2: self.__type_a_message
         }
     
+    def broadcast(self, msg):
+        client_data_register = list()
+        for i, client in self.clients.items():
+            client.send(msg, self.dcf)
+            client_data = client.recv(self.bites, self.dcf)
+            client_data_register.append(client_data)
+        return client_data_register
+
     def __close(self):
         """
         Closes all the clients and then closes the server and exits the app.
@@ -158,13 +167,21 @@ class Server:
             command = input(">>> ")
             if command == self.exit_command:
                 break
-            cdr = [] # client data register
-            for i, client in self.clients.items():
-                client.send(command, self.dcf)
-                client_data = client.recv(self.bites, self.dcf)
-                cdr.append(client_data)
+            cdr = self.broadcast(command)
             print(f"{self.__colors.INFO}{command} sended to {len(cdr)} clients{self.__colors.ENDC}")
 
+
+    def __type_a_message(self):
+        maximum_lines = 30
+        lines = []
+        for i in range(maximum_lines):
+            uni = input() or "" # uni = user input
+            if uni == self.exit_command:
+                break
+            else:
+                lines.append(uni)
+        text = '\n'.join(lines)
+        self.broadcast(f'echo "{text}"')
 
     def __loop(self):
         """
